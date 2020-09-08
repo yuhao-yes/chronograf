@@ -33,6 +33,8 @@ import (
 	"github.com/influxdata/chronograf/oauth2"
 	client "github.com/influxdata/usage-client/v1"
 	flags "github.com/jessevdk/go-flags"
+
+	"github.com/influxdata/chronograf/dbstore"
 )
 
 var (
@@ -748,7 +750,9 @@ func openService(ctx context.Context, db kv.Store, builder builders, logger chro
 		os.Exit(1)
 	}
 
-	dashboards, err := builder.Dashboards.Build(svc.DashboardsStore())
+	//only dashboardstore using dbstore, others still using kv.
+	// dashboards, err := builder.Dashboards.Build(svc.DashboardsStore())
+	dashboards, err := builder.Dashboards.Build(dbstore.NewDashboardsStore())
 	if err != nil {
 		logger.
 			WithField("component", "DashboardsStore").

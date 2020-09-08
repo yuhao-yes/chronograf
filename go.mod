@@ -30,6 +30,7 @@ require (
 	github.com/jessevdk/go-flags v1.4.0
 	github.com/jonboulle/clockwork v0.1.0 // indirect
 	github.com/lestrrat-go/jwx v0.9.0
+	github.com/mattn/go-sqlite3 v1.14.2 // indirect
 	github.com/microcosm-cc/bluemonday v1.0.2
 	github.com/segmentio/kafka-go v0.3.4 // indirect
 	github.com/sergi/go-diff v1.1.0
@@ -44,12 +45,14 @@ require (
 	go.uber.org/zap v1.13.0 // indirect
 	golang.org/x/crypto v0.0.0-20191227163750-53104e6ec876 // indirect
 	golang.org/x/lint v0.0.0-20191125180803-fdd1cda4f05f // indirect
-	golang.org/x/net v0.0.0-20191209160850-c0dbc17a3553
+	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e
 	golang.org/x/oauth2 v0.0.0-20190604053449-0f29369cfe45
-	golang.org/x/sys v0.0.0-20200107162124-548cf772de50 // indirect
 	golang.org/x/tools v0.0.0-20200107050322-53017a39ae36 // indirect
 	google.golang.org/api v0.15.0
 	gopkg.in/yaml.v2 v2.2.7 // indirect
+	gorm.io/driver/mysql v1.0.1
+	gorm.io/driver/sqlite v1.1.1 // indirect
+	gorm.io/gorm v1.20.0
 	sigs.k8s.io/yaml v1.1.0 // indirect
 )
 
