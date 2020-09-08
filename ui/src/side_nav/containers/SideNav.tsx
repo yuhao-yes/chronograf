@@ -58,8 +58,6 @@ class SideNav extends PureComponent<Props> {
 
     const isDefaultPage = location.split('/').includes(DEFAULT_HOME_PAGE)
 
-    const hostPageIsEnabled = !env.hostPageDisabled
-
     return isHidden ? null : (
       <nav className="sidebar">
         <div
@@ -72,16 +70,6 @@ class SideNav extends PureComponent<Props> {
             <span className="sidebar--icon icon cubo-uniform" />
           </Link>
         </div>
-        {hostPageIsEnabled && (
-          <NavBlock
-            highlightWhen={['hosts']}
-            icon="eye"
-            link={`${sourcePrefix}/hosts`}
-            location={location}
-          >
-            <NavHeader link={`${sourcePrefix}/hosts`} title="Host List" />
-          </NavBlock>
-        )}
         <NavBlock
           highlightWhen={['data-explorer']}
           icon="graphline-2"
@@ -98,66 +86,6 @@ class SideNav extends PureComponent<Props> {
         >
           <NavHeader link={`${sourcePrefix}/dashboards`} title="Dashboards" />
         </NavBlock>
-        <NavBlock
-          highlightWhen={['alerts', 'alert-rules', 'tickscript']}
-          icon="alerts"
-          link={`${sourcePrefix}/alert-rules`}
-          location={location}
-        >
-          <NavHeader link={`${sourcePrefix}/alert-rules`} title="Alerting" />
-          <NavListItem link={`${sourcePrefix}/alert-rules`}>
-            Manage Tasks
-          </NavListItem>
-          <NavListItem link={`${sourcePrefix}/alerts`}>
-            Alert History
-          </NavListItem>
-        </NavBlock>
-
-        <NavBlock
-          highlightWhen={['logs']}
-          icon="wood"
-          link="/logs"
-          location={location}
-        >
-          <NavHeader link={'/logs'} title="Log Viewer" />
-        </NavBlock>
-
-        <Authorized
-          requiredRole={ADMIN_ROLE}
-          replaceWithIfNotUsingAuth={
-            <NavBlock
-              highlightWhen={['admin-influxdb']}
-              icon="crown-outline"
-              link={`${sourcePrefix}/admin-influxdb/databases`}
-              location={location}
-            >
-              <NavHeader
-                link={`${sourcePrefix}/admin-influxdb/databases`}
-                title="InfluxDB Admin"
-              />
-            </NavBlock>
-          }
-        >
-          <NavBlock
-            highlightWhen={['admin-chronograf', 'admin-influxdb']}
-            icon="crown-outline"
-            link={`${sourcePrefix}/admin-chronograf/current-organization`}
-            location={location}
-          >
-            <NavHeader
-              link={`${sourcePrefix}/admin-chronograf/current-organization`}
-              title="Admin"
-            />
-            <NavListItem
-              link={`${sourcePrefix}/admin-chronograf/current-organization`}
-            >
-              Chronograf
-            </NavListItem>
-            <NavListItem link={`${sourcePrefix}/admin-influxdb/databases`}>
-              InfluxDB
-            </NavListItem>
-          </NavBlock>
-        </Authorized>
         <NavBlock
           highlightWhen={['manage-sources', 'kapacitors']}
           icon="wrench"
