@@ -42,6 +42,7 @@ interface CellLinks {
 export enum QueryType {
   Flux = 'flux',
   InfluxQL = 'influxql',
+  SQL = 'sql',
 }
 
 // corresponds to DashboardQuery on the backend

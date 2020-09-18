@@ -1,7 +1,7 @@
-import {replace, RouterAction, push} from 'react-router-redux'
+import { replace, RouterAction, push } from 'react-router-redux'
 import _ from 'lodash'
 import qs from 'qs'
-import {Dispatch} from 'redux'
+import { Dispatch } from 'redux'
 
 import {
   getDashboards as getDashboardsAJAX,
@@ -13,19 +13,19 @@ import {
   deleteDashboardCell as deleteDashboardCellAJAX,
   createDashboard as createDashboardAJAX,
 } from 'src/dashboards/apis'
-import {getMe} from 'src/shared/apis/auth'
-import {hydrateTemplates} from 'src/tempVars/utils/graph'
+import { getMe } from 'src/shared/apis/auth'
+import { hydrateTemplates } from 'src/tempVars/utils/graph'
 
-import {notify} from 'src/shared/actions/notifications'
-import {errorThrown} from 'src/shared/actions/errors'
-import {stripPrefix} from 'src/utils/basepath'
+import { notify } from 'src/shared/actions/notifications'
+import { errorThrown } from 'src/shared/actions/errors'
+import { stripPrefix } from 'src/utils/basepath'
 
 import {
   templateSelectionsFromQueryParams,
   templateSelectionsFromTemplates,
 } from 'src/dashboards/utils/tempVars'
-import {validTimeRange, validAbsoluteTimeRange} from 'src/dashboards/utils/time'
-import {getClonedDashboardCell} from 'src/dashboards/utils/cellGetters'
+import { validTimeRange, validAbsoluteTimeRange } from 'src/dashboards/utils/time'
+import { getClonedDashboardCell } from 'src/dashboards/utils/cellGetters'
 import {
   notifyDashboardDeleted,
   notifyDashboardDeleteFailed,
@@ -39,9 +39,9 @@ import {
   notifyInvalidQueryParam,
 } from 'src/shared/copy/notifications'
 
-import {getDeep} from 'src/utils/wrappers'
+import { getDeep } from 'src/utils/wrappers'
 
-import {DEFAULT_TIME_RANGE} from 'src/shared/data/timeRanges'
+import { DEFAULT_TIME_RANGE } from 'src/shared/data/timeRanges'
 
 // Types
 import {
@@ -55,7 +55,7 @@ import {
   Status,
   RefreshRate,
 } from 'src/types'
-import {NewDefaultCell} from 'src/types/dashboards'
+import { NewDefaultCell } from 'src/types/dashboards'
 
 export enum ActionType {
   LoadDashboards = 'LOAD_DASHBOARDS',
@@ -264,7 +264,7 @@ export const loadDashboards = (
 
 export const loadDashboard = (dashboard: Dashboard): LoadDashboardAction => ({
   type: ActionType.LoadDashboard,
-  payload: {dashboard},
+  payload: { dashboard },
 })
 
 export const setDashTimeV1 = (
@@ -272,7 +272,7 @@ export const setDashTimeV1 = (
   timeRange: TimeRange
 ): SetDashTimeV1Action => ({
   type: ActionType.SetDashboardTimeV1,
-  payload: {dashboardID, timeRange},
+  payload: { dashboardID, timeRange },
 })
 
 export const setDashRefresh = (
@@ -280,61 +280,61 @@ export const setDashRefresh = (
   refreshRate: RefreshRate
 ): SetDashRefreshAction => ({
   type: ActionType.SetDashboardRefresh,
-  payload: {dashboardID, refreshRate},
+  payload: { dashboardID, refreshRate },
 })
 
 export const retainRangesDashTimeV1 = (
   dashboardIDs: number[]
 ): RetainRangesDashTimeV1Action => ({
   type: ActionType.RetainRangesDashboardTimeV1,
-  payload: {dashboardIDs},
+  payload: { dashboardIDs },
 })
 
 export const retainDashRefresh = (
   dashboardIDs: number[]
 ): RetainDashRefreshAction => ({
   type: ActionType.RetainDashboardRefresh,
-  payload: {dashboardIDs},
+  payload: { dashboardIDs },
 })
 
 export const setTimeRange = (timeRange: TimeRange): SetTimeRangeAction => ({
   type: ActionType.SetDashboardTimeRange,
-  payload: {timeRange},
+  payload: { timeRange },
 })
 
 export const setZoomedTimeRange = (
   zoomedTimeRange: TimeRange
 ): SetZoomedTimeRangeAction => ({
   type: ActionType.SetDashboardZoomedTimeRange,
-  payload: {zoomedTimeRange},
+  payload: { zoomedTimeRange },
 })
 
 export const updateDashboard = (
   dashboard: Dashboard
 ): UpdateDashboardAction => ({
   type: ActionType.UpdateDashboard,
-  payload: {dashboard},
+  payload: { dashboard },
 })
 
 export const createDashboard = (
   dashboard: Dashboard
 ): CreateDashboardAction => ({
   type: ActionType.CreateDashboard,
-  payload: {dashboard},
+  payload: { dashboard },
 })
 
 export const deleteDashboard = (
   dashboard: Dashboard
 ): DeleteDashboardAction => ({
   type: ActionType.DeleteDashboard,
-  payload: {dashboard},
+  payload: { dashboard },
 })
 
 export const deleteDashboardFailed = (
   dashboard: Dashboard
 ): DeleteDashboardFailedAction => ({
   type: ActionType.DeleteDashboardFailed,
-  payload: {dashboard},
+  payload: { dashboard },
 })
 
 export const syncDashboardCell = (
@@ -342,7 +342,7 @@ export const syncDashboardCell = (
   cell: Cell
 ): SyncDashboardCellAction => ({
   type: ActionType.SyncDashboardCell,
-  payload: {dashboard, cell},
+  payload: { dashboard, cell },
 })
 
 export const addDashboardCell = (
@@ -350,7 +350,7 @@ export const addDashboardCell = (
   cell: Cell
 ): AddDashboardCellAction => ({
   type: ActionType.AddDashboardCell,
-  payload: {dashboard, cell},
+  payload: { dashboard, cell },
 })
 
 export const deleteDashboardCell = (
@@ -358,7 +358,7 @@ export const deleteDashboardCell = (
   cell: Cell
 ): DeleteDashboardCellAction => ({
   type: ActionType.DeleteDashboardCell,
-  payload: {dashboard, cell},
+  payload: { dashboard, cell },
 })
 
 export const editCellQueryStatus = (
@@ -366,7 +366,7 @@ export const editCellQueryStatus = (
   status: Status
 ): EditCellQueryStatusAction => ({
   type: ActionType.EditCellQueryStatus,
-  payload: {queryID, status},
+  payload: { queryID, status },
 })
 
 export const templateVariableLocalSelected = (
@@ -375,33 +375,33 @@ export const templateVariableLocalSelected = (
   value: TemplateValue
 ): TemplateVariableLocalSelectedAction => ({
   type: ActionType.TemplateVariableLocalSelected,
-  payload: {dashboardID, templateID, value},
+  payload: { dashboardID, templateID, value },
 })
 
 export const updateTemplates = (
   templates: Template[]
 ): UpdateTemplatesAction => ({
   type: ActionType.UpdateTemplates,
-  payload: {templates},
+  payload: { templates },
 })
 
 export const setHoverTime = (hoverTime: string): SetHoverTimeAction => ({
   type: ActionType.SetHoverTime,
-  payload: {hoverTime},
+  payload: { hoverTime },
 })
 
 export const setActiveCell = (activeCellID: string): SetActiveCellAction => ({
   type: ActionType.SetActiveCell,
-  payload: {activeCellID},
+  payload: { activeCellID },
 })
 
 export const updateTimeRangeQueryParams = (
   updatedQueryParams: object
 ): RouterAction => {
-  const {search, pathname} = window.location
+  const { search, pathname } = window.location
   const strippedPathname = stripPrefix(pathname)
 
-  const parsed = _.omit(qs.parse(search, {ignoreQueryPrefix: true}), [
+  const parsed = _.omit(qs.parse(search, { ignoreQueryPrefix: true }), [
     'lower',
     'upper',
     'zoomedLower',
@@ -417,25 +417,25 @@ export const updateTimeRangeQueryParams = (
   )
 
   const newSearch = qs.stringify(newQueryParams)
-  const newLocation = {pathname: strippedPathname, search: `?${newSearch}`}
+  const newLocation = { pathname: strippedPathname, search: `?${newSearch}` }
 
   return push(newLocation)
 }
 
 export const updateQueryParams = (updatedQueryParams: object): RouterAction => {
-  const {search, pathname} = window.location
+  const { search, pathname } = window.location
   const strippedPathname = stripPrefix(pathname)
 
   const newQueryParams = _.pickBy(
     {
-      ...qs.parse(search, {ignoreQueryPrefix: true}),
+      ...qs.parse(search, { ignoreQueryPrefix: true }),
       ...updatedQueryParams,
     },
     v => !!v
   )
 
   const newSearch = qs.stringify(newQueryParams)
-  const newLocation = {pathname: strippedPathname, search: `?${newSearch}`}
+  const newLocation = { pathname: strippedPathname, search: `?${newSearch}` }
 
   return replace(newLocation)
 }
@@ -457,7 +457,7 @@ export const getDashboardsAsync = () => async (
 ): Promise<Dashboard[]> => {
   try {
     const {
-      data: {dashboards},
+      data: { dashboards },
     } = await getDashboardsAJAX()
     dispatch(loadDashboards(dashboards))
     return dashboards
@@ -490,7 +490,7 @@ const removeUnselectedTemplateValues = (dashboard: Dashboard): Template[] => {
       const value = template.values.find(val => val.selected)
       const values = value ? [value] : []
 
-      return {...template, values}
+      return { ...template, values }
     }
   )
   return templates
@@ -530,7 +530,7 @@ export const putDashboardByID = (dashboardID: string) => async (
   try {
     const dashboard = getDashboard(getState(), dashboardID)
     const templates = removeUnselectedTemplateValues(dashboard)
-    await updateDashboardAJAX({...dashboard, templates})
+    await updateDashboardAJAX({ ...dashboard, templates })
   } catch (error) {
     console.error(error)
     dispatch(errorThrown(error))
@@ -542,7 +542,7 @@ export const updateDashboardCell = (
   cell: Cell | NewDefaultCell
 ) => async (dispatch: Dispatch<Action>): Promise<void> => {
   try {
-    const {data} = await updateDashboardCellAJAX(cell)
+    const { data } = await updateDashboardCellAJAX(cell)
     dispatch(syncDashboardCell(dashboard, data))
   } catch (error) {
     console.error(error)
@@ -573,7 +573,7 @@ export const addDashboardCellAsync = (
   cell: Partial<Cell>
 ) => async (dispatch: Dispatch<Action>): Promise<void> => {
   try {
-    const {data} = await addDashboardCellAJAX(dashboard, cell)
+    const { data } = await addDashboardCellAJAX(dashboard, cell)
     dispatch(addDashboardCell(dashboard, data))
     dispatch(notify(notifyCellAdded(data.name)))
   } catch (error) {
@@ -587,17 +587,17 @@ export const sendDashboardCellAsync = (
   cell: Partial<Cell>
 ) => async (
   dispatch: Dispatch<Action>
-): Promise<{success: boolean; dashboard: Dashboard}> => {
-  try {
-    const {data} = await addDashboardCellAJAX(dashboard, cell)
-    dispatch(addDashboardCell(dashboard, data))
-    return {success: true, dashboard}
-  } catch (error) {
-    console.error(error)
-    dispatch(errorThrown(error))
-    return {success: false, dashboard}
+): Promise<{ success: boolean; dashboard: Dashboard }> => {
+    try {
+      const { data } = await addDashboardCellAJAX(dashboard, cell)
+      dispatch(addDashboardCell(dashboard, data))
+      return { success: true, dashboard }
+    } catch (error) {
+      console.error(error)
+      dispatch(errorThrown(error))
+      return { success: false, dashboard }
+    }
   }
-}
 
 export const cloneDashboardCellAsync = (
   dashboard: Dashboard,
@@ -605,7 +605,7 @@ export const cloneDashboardCellAsync = (
 ) => async (dispatch: Dispatch<Action>): Promise<void> => {
   try {
     const clonedCell = getClonedDashboardCell(dashboard, cell)
-    const {data} = await addDashboardCellAJAX(dashboard, clonedCell)
+    const { data } = await addDashboardCellAJAX(dashboard, clonedCell)
     dispatch(addDashboardCell(dashboard, data))
     dispatch(notify(notifyCellAdded(clonedCell.name)))
   } catch (error) {
@@ -653,7 +653,7 @@ export const importDashboardAsync = (dashboard: Dashboard) => async (
     )
 
     const {
-      data: {dashboards},
+      data: { dashboards },
     } = await getDashboardsAJAX()
 
     dispatch(loadDashboards(dashboards))
@@ -675,7 +675,7 @@ const updateTimeRangeFromQueryParams = (dashboardID: string) => (
   dispatch: Dispatch<Action>,
   getState
 ): void => {
-  const {dashTimeV1} = getState()
+  const { dashTimeV1 } = getState()
   const queryParams = qs.parse(window.location.search, {
     ignoreQueryPrefix: true,
   })
@@ -771,7 +771,7 @@ export const getDashboardWithTemplatesAsync = (
     }
   })
 
-  dispatch(loadDashboard({...dashboard, templates}))
+  dispatch(loadDashboard({ ...dashboard, templates }))
   dispatch(updateTemplateQueryParams(dashboardId))
   dispatch(updateTimeRangeFromQueryParams(dashboardId))
 }

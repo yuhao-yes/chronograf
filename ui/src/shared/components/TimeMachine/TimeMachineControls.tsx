@@ -1,12 +1,12 @@
 // Libraries
-import React, {SFC} from 'react'
+import React, { SFC } from 'react'
 
 // Components
 import SourceSelector from 'src/dashboards/components/SourceSelector'
 import TimeRangeDropdown from 'src/shared/components/TimeRangeDropdown'
 import CSVExporter from 'src/shared/components/TimeMachine/CSVExporter'
 import AutoRefreshDropdown from 'src/shared/components/dropdown_auto_refresh/AutoRefreshDropdown'
-import {SlideToggle, ComponentSize} from 'src/reusable_ui'
+import { SlideToggle, ComponentSize } from 'src/reusable_ui'
 
 // Utils
 import buildQueries from 'src/utils/buildQueriesForGraphs'
@@ -14,10 +14,10 @@ import buildQueries from 'src/utils/buildQueriesForGraphs'
 // Types
 import * as QueriesModels from 'src/types/queries'
 import * as SourcesModels from 'src/types/sources'
-import {Template, QueryType} from 'src/types'
+import { Template, QueryType } from 'src/types'
 
 // Constants
-import {AutoRefreshOption} from 'src/shared/components/dropdown_auto_refresh/autoRefreshOptions'
+import { AutoRefreshOption } from 'src/shared/components/dropdown_auto_refresh/autoRefreshOptions'
 
 interface Props {
   isFluxSelected: boolean
@@ -38,6 +38,9 @@ interface Props {
   toggleFlux: (queryType: QueryType) => void
   toggleIsViewingRawData: () => void
   onManualRefresh: () => void
+
+  sourceSupportsSQL: boolean
+  isSQLSelected: boolean
 }
 
 const TimeMachineControls: SFC<Props> = ({
@@ -59,6 +62,9 @@ const TimeMachineControls: SFC<Props> = ({
   toggleIsViewingRawData,
   isDynamicSourceSelected,
   updateEditorTimeRange,
+
+  sourceSupportsSQL,
+  isSQLSelected,
 }) => {
   return (
     <div className="deceo--controls">
@@ -72,6 +78,9 @@ const TimeMachineControls: SFC<Props> = ({
         onChangeSource={onChangeSource}
         isDynamicSourceSelected={isDynamicSourceSelected}
         onSelectDynamicSource={onSelectDynamicSource}
+
+        sourceSupportsSQL={sourceSupportsSQL}
+        isSQLSelected={isSQLSelected}
       />
       {isFluxSelected && (
         <div className="time-machine-vis--raw-toggle">

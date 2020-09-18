@@ -328,6 +328,7 @@ class DashboardPage extends Component<Props, State> {
           onToggleShowTempVarControls={toggleTemplateVariableControlBar}
           onToggleShowAnnotationControls={this.toggleAnnotationControls}
           handleClickPresentationButton={handleClickPresentationButton}
+          onCloneCell={this.handleCloneCell}
         />
         {!inPresentationMode &&
           showTemplateVariableControlBar && (

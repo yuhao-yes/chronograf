@@ -1,25 +1,25 @@
 // Libraries
-import React, {PureComponent} from 'react'
+import React, { PureComponent } from 'react'
 import _ from 'lodash'
 import uuid from 'uuid'
 
 // APIs
-import {executeQueries as executeInfluxQLQueries} from 'src/shared/apis/query'
-import {executeQuery as executeFluxQuery} from 'src/shared/apis/flux/query'
+import { executeQueries as executeInfluxQLQueries } from 'src/shared/apis/query'
+import { executeQuery as executeFluxQuery } from 'src/shared/apis/flux/query'
 
 // Utils
 import {
   extractQueryWarningMessage,
   extractQueryErrorMessage,
 } from 'src/shared/parsing'
-import {notify} from 'src/shared/actions/notifications'
-import {fluxResponseTruncatedError} from 'src/shared/copy/notifications'
-import {getDeep} from 'src/utils/wrappers'
-import {restartable} from 'src/shared/utils/restartable'
-import {renderTemplatesInScript} from 'src/flux/helpers/templates'
-import {parseResponse} from 'src/shared/parsing/flux/response'
-import DefaultDebouncer, {Debouncer} from 'src/shared/utils/debouncer'
-import {DEFAULT_X_PIXELS} from 'src/shared/constants'
+import { notify } from 'src/shared/actions/notifications'
+import { fluxResponseTruncatedError } from 'src/shared/copy/notifications'
+import { getDeep } from 'src/utils/wrappers'
+import { restartable } from 'src/shared/utils/restartable'
+import { renderTemplatesInScript } from 'src/flux/helpers/templates'
+import { parseResponse } from 'src/shared/parsing/flux/response'
+import DefaultDebouncer, { Debouncer } from 'src/shared/utils/debouncer'
+import { DEFAULT_X_PIXELS } from 'src/shared/constants'
 
 // Types
 import {
@@ -32,10 +32,10 @@ import {
   FluxTable,
   QueryType,
 } from 'src/types'
-import {TimeSeriesServerResponse} from 'src/types/series'
-import {GrabDataForDownloadHandler} from 'src/types/layout'
+import { TimeSeriesServerResponse } from 'src/types/series'
+import { GrabDataForDownloadHandler } from 'src/types/layout'
 
-export const DEFAULT_TIME_SERIES = [{response: {results: []}}]
+export const DEFAULT_TIME_SERIES = [{ response: { results: [] } }]
 const EXECUTE_QUERIES_DEBOUNCE_MS = 400
 
 interface RenderProps {
@@ -175,20 +175,26 @@ class TimeSeries extends PureComponent<Props, State> {
   }
 
   private get isFluxQuery(): boolean {
-    const {queries} = this.props
+    const { queries } = this.props
 
     return getDeep<string>(queries, '0.type', '') === QueryType.Flux
   }
 
+  private get isSQLQuery(): boolean {
+    const { queries } = this.props
+
+    return getDeep<string>(queries, '0.type', '') === QueryType.SQL
+  }
+
   private get isInitialFetch(): boolean {
-    const {fetchCount} = this.state
+    const { fetchCount } = this.state
     const isInitialFetch = fetchCount === 1
 
     return isInitialFetch
   }
 
   private get loadingDots(): JSX.Element {
-    const {loading} = this.state
+    const { loading } = this.state
 
     if (loading === RemoteDataState.Loading && !this.isInitialFetch) {
       return <GraphLoadingDots />
@@ -198,7 +204,7 @@ class TimeSeries extends PureComponent<Props, State> {
   }
 
   private executeQueries = async () => {
-    const {inView, queries, grabDataForDownload, grabFluxData} = this.props
+    const { inView, queries, grabDataForDownload, grabFluxData } = this.props
 
     if (!inView) {
       return
@@ -235,6 +241,15 @@ class TimeSeries extends PureComponent<Props, State> {
         timeSeriesFlux = results.tables
         rawFluxData = results.csv
         responseUUID = results.uuid
+      } else if (this.isSQLQuery) {
+        //to do sql query here.
+        alert("catch you! to do sql query")
+        console.log("catch you! to do sql query");
+
+        //need to return timeSeriesFlux, rawFluxData, responseUUID like isFluxQuery
+        // timeSeriesFlux = 
+        // rawFluxData = 
+        // responseUUID = 
       } else {
         timeSeriesInfluxQL = await this.executeInfluxQLWithStatus(latestUUID)
         responseUUID = _.get(timeSeriesInfluxQL, '0.response.uuid')
@@ -265,7 +280,7 @@ class TimeSeries extends PureComponent<Props, State> {
   }
 
   private executeTemplatedFluxQuery = async (latestUUID: string) => {
-    const {queries, onNotify, source, timeRange, fluxASTLink} = this.props
+    const { queries, onNotify, source, timeRange, fluxASTLink } = this.props
 
     const script: string = _.get(queries, '0.text', '')
 
@@ -285,16 +300,16 @@ class TimeSeries extends PureComponent<Props, State> {
       onNotify(fluxResponseTruncatedError(results.rowCount))
     }
 
-    return {...results, tables: parseResponse(results.csv)}
+    return { ...results, tables: parseResponse(results.csv) }
   }
 
   private executeInfluxQLWithStatus = async (
     latestUUID: string
   ): Promise<TimeSeriesServerResponse[]> => {
-    const {source, templates, editQueryStatus, queries} = this.props
+    const { source, templates, editQueryStatus, queries } = this.props
 
     for (const query of queries) {
-      editQueryStatus(query.id, {loading: true})
+      editQueryStatus(query.id, { loading: true })
     }
 
     const results = await this.executeInfluxQLQueries(
@@ -305,20 +320,20 @@ class TimeSeries extends PureComponent<Props, State> {
     )
 
     for (let i = 0; i < queries.length; i++) {
-      const {value, error} = results[i]
+      const { value, error } = results[i]
       const query = queries[i]
 
       let queryStatus
 
       if (error) {
-        queryStatus = {error: extractQueryErrorMessage(error)}
+        queryStatus = { error: extractQueryErrorMessage(error) }
       } else {
         const warningMessage = extractQueryWarningMessage(value)
 
         if (warningMessage) {
-          queryStatus = {warn: warningMessage}
+          queryStatus = { warn: warningMessage }
         } else {
-          queryStatus = {success: 'Success!'}
+          queryStatus = { success: 'Success!' }
         }
       }
 

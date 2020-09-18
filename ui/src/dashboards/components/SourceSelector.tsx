@@ -1,15 +1,15 @@
 // Libraries
-import React, {SFC} from 'react'
+import React, { SFC } from 'react'
 
 // Components
 import SourceDropdown from 'src/flux/components/SourceDropdown'
-import {Radio} from 'src/reusable_ui'
+import { Radio } from 'src/reusable_ui'
 import QuestionMarkTooltip from 'src/shared/components/QuestionMarkTooltip'
 
 // Types
 import * as QueriesModels from 'src/types/queries'
 import * as SourcesModels from 'src/types/sources'
-import {QueryType} from 'src/types'
+import { QueryType } from 'src/types'
 
 interface Props {
   source: SourcesModels.Source
@@ -21,6 +21,9 @@ interface Props {
   toggleFlux: (queryType: QueryType) => void
   onSelectDynamicSource: () => void
   onChangeSource: (source: SourcesModels.Source, type: QueryType) => void
+
+  sourceSupportsSQL: boolean
+  isSQLSelected: boolean
 }
 
 const SourceSelector: SFC<Props> = ({
@@ -33,6 +36,9 @@ const SourceSelector: SFC<Props> = ({
   sourceSupportsFlux,
   isDynamicSourceSelected,
   onSelectDynamicSource,
+
+  sourceSupportsSQL,
+  isSQLSelected,
 }) => {
   if (!sources.length || !queries.length) {
     return <div className="source-selector" />
@@ -58,8 +64,8 @@ const SourceSelector: SFC<Props> = ({
           titleText="InfluxQL"
           value={QueryType.InfluxQL}
           onClick={toggleFlux}
-          active={!isFluxSelected}
-          disabled={!sourceSupportsFlux}
+          active={!isFluxSelected && !isSQLSelected}
+          disabled={!sourceSupportsFlux && !sourceSupportsSQL}
         >
           InfluxQL
         </Radio.Button>
@@ -72,6 +78,16 @@ const SourceSelector: SFC<Props> = ({
           disabled={!sourceSupportsFlux}
         >
           Flux
+        </Radio.Button>
+        <Radio.Button
+          id="sql-source"
+          titleText="SQL"
+          value={QueryType.SQL}
+          onClick={toggleFlux}
+          active={isSQLSelected}
+          disabled={!sourceSupportsSQL}
+        >
+          SQL
         </Radio.Button>
       </Radio>
       {!sourceSupportsFlux && (
